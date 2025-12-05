@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: zeta-postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: zetauser
+      POSTGRES_PASSWORD: zetapass
+      POSTGRES_DB: zeta_postgres_db
+    ports:
+      - "5433:5432"
+    networks:
+      zeta-net-postgres:
+        ipv4_address: 172.0.6.10
+
+  adminer:
+    container_name: zeta-adminer
+    image: adminer
+    restart: always
+    ports:
+      - "8082:8080"
+    networks:
+      zeta-net-postgres:
+        ipv4_address: 172.0.6.20
+
+networks:
+  zeta-net-postgres:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.0.6.0/24
