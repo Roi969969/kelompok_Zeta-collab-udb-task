@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mysql:
+    container_name: zeta-mysql
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: zetapass
+      MYSQL_DATABASE: zeta_mysql_db
+      MYSQL_USER: zetauser
+      MYSQL_PASSWORD: zetapass
+    ports:
+      - "3307:3306"
+    networks:
+      zeta-net-mysql:
+        ipv4_address: 172.0.5.10
+
+  phpmyadmin:
+    container_name: zeta-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: zeta-mysql
+    ports:
+      - "8081:80"
+    networks:
+      zeta-net-mysql:
+        ipv4_address: 172.0.5.20
+
+networks:
+  zeta-net-mysql:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.0.5.0/24
